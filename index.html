@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Food2Go Yaoundé</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#FF6B35">
+<style>
+body{font-family:Arial;margin:0;padding:20px;background:#1a1a1a}
+.header{text-align:center;padding:30px 20px;background:linear-gradient(135deg,#FF6B35,#FF8E53);color:white;border-radius:15px;margin-bottom:20px}
+.resto{background:#2d2d2d;padding:20px;margin:15px 0;border-radius:12px;cursor:pointer}
+.resto h3{margin:0 0 8px 0;color:#FF6B35}
+.resto p{margin:5px 0;color:#ccc}
+.note{color:#4CAF50;font-size:14px}
+.retour{background:#444;color:white;border:none;padding:12px 20px;border-radius:8px;margin-bottom:15px}
+.menu-item{background:#2d2d2d;padding:15px;margin:10px 0;border-radius:8px;display:flex;justify-content:space-between;color:white}
+.commander-btn{background:#25D366;color:white;border:none;padding:15px;width:100%;border-radius:8px;font-size:16px;margin-top:20px}
+</style>
+</head>
+<body onload="init()">
+<div id="app"></div>
+<script>
+const restos = {
+  resto1: {nom:"1. Le Gourmet de Mvan",spec:"Cuisine camerounaise",note:"⭐4.8",tel:"2376XXXXXXX",menu:[{nom:"Ndolé + Plantain",prix:2500},{nom:"Poulet DG",prix:3000},{nom:"Eru + Water Fufu",prix:2000}]},
+  resto2: {nom:"2. Saveurs de Bastos",spec:"Grillades & Fast-food",note:"⭐4.5",tel:"2376XXXXXXX",menu:[{nom:"Brochettes de Boeuf",prix:1500},{nom:"Poulet Braisé",prix:3500},{nom:"Chips + Poisson",prix:2000}]},
+  resto3: {nom:"3. Poulet'o Bastos",spec:"Le meilleur poulet",note:"⭐4.9",tel:"2376XXXXXXX",menu:[{nom:"1/4 Poulet + Frites",prix:2000},{nom:"1/2 Poulet + Plantain",prix:3500},{nom:"Poulet Entier",prix:6000}]}
+};
+let vue = 'liste';
+function init(){afficher()}
+function afficher(){
+  let html = '';
+  if(vue === 'liste'){
+    html = '<div class="header"><h1>🍗 Food2Go Yaoundé</h1><p>Tous vos restos. Livraison 30min</p></div>';
+    for(let id in restos){
+      html += `<div class="resto" onclick="voirMenu('${id}')"><h3>${restos[id].nom}</h3><p>Spécialité : ${restos[id].spec}</p><p class="note">${restos[id].note} • Livraison 30min</p></div>`;
+    }
+  } else {
+    const r = restos[vue];
+    html = `<button class="retour" onclick="voirListe()">← Voir tous les restos</button><div class="header"><h2>${r.nom}</h2><p>${r.spec}</p></div>`;
+    r.menu.forEach(item => {
+      html += `<div class="menu-item"><span>${item.nom}</span><strong>${item.prix} FCFA</strong></div>`;
+    });
+    html += `<button class="commander-btn" onclick="commander('${r.tel}','${r.nom}')">Commander sur WhatsApp</button>`;
+  }
+  document.getElementById('app').innerHTML = html;
+}
+function voirMenu(id){vue = id;afficher()}
+function voirListe(){vue = 'liste';afficher()}
+function commander(tel,nom){
+  const msg = `Salut ${nom}! Je veux commander via Food2Go :`;
+  window.open(`https://wa.me/${tel}?text=${encodeURIComponent(msg)}`);
+}
+</script>
+</body>
+  </html>
